@@ -107,8 +107,8 @@ class AssemblyGuiPlugin(Plugin):
                                        strictness = 2)
         print(req)
         self.switch_proxy(stop)
-        self.top_load_proxy(req)
         rospy.sleep(0.5)
+        self.top_load_proxy(req)
         self.switch_proxy(start)
 
     def btn_top_set_load_drill_on_click(self):
@@ -120,8 +120,8 @@ class AssemblyGuiPlugin(Plugin):
                                        strictness = 2)
         print(req)
         self.switch_proxy(stop)
-        self.top_load_proxy(req)
         rospy.sleep(0.5)
+        self.top_load_proxy(req)
         self.switch_proxy(start)
 
     def btn_top_init_joint_on_click(self):
@@ -149,8 +149,8 @@ class AssemblyGuiPlugin(Plugin):
                                        strictness = 2)
         print(req)
         self.switch_proxy(stop)
-        self.right_load_proxy(req)
         rospy.sleep(0.5)
+        self.right_load_proxy(req)
         self.switch_proxy(start)
 
     def btn_right_set_load_drill_on_click(self):
@@ -162,8 +162,8 @@ class AssemblyGuiPlugin(Plugin):
                                        strictness = 2)
         print(req)
         self.switch_proxy(stop)
-        self.right_load_proxy(req)
         rospy.sleep(0.5)
+        self.right_load_proxy(req)
         self.switch_proxy(start)
 
     def btn_right_init_joint_on_click(self):
@@ -191,8 +191,8 @@ class AssemblyGuiPlugin(Plugin):
                                        strictness = 2)
         print(req)
         self.switch_proxy(stop)
-        self.left_load_proxy(req)
         rospy.sleep(0.5)
+        self.left_load_proxy(req)
         self.switch_proxy(start)
 
     def btn_left_set_load_drill_on_click(self):
@@ -234,14 +234,14 @@ class AssemblyGuiPlugin(Plugin):
 
     def btn_drill_short_run_on_click(self):
         req = JrkCmdRequest()
-        req.name = 'right_short'
+        req.name = 'top_short'
         req.target_value = self._widget.spinbox_drill_short_power.value()
         print(req)
         self.drill_proxy(req)
 
     def btn_drill_short_stop_on_click(self):
         req = JrkCmdRequest()
-        req.name = 'right_short'
+        req.name = 'top_short'
         req.target_value = 0.0
         print(req)
         self.drill_proxy(req)
