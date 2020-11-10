@@ -96,7 +96,6 @@ class AssemblyGuiPlugin(Plugin):
         self._widget.btn_top_set_load_drill.pressed.connect(self.btn_top_set_load_drill_on_click)
         self._widget.btn_top_set_load_zero.pressed.connect(self.btn_top_set_load_zero_on_click)
 
-
         self._widget.btn_init_joint_all.pressed.connect(self.btn_init_joint_all_on_click)
 
     def btn_top_set_load_zero_on_click(self):
@@ -234,14 +233,14 @@ class AssemblyGuiPlugin(Plugin):
 
     def btn_drill_short_run_on_click(self):
         req = JrkCmdRequest()
-        req.name = 'top_short'
+        req.name = 'top_long'
         req.target_value = self._widget.spinbox_drill_short_power.value()
         print(req)
         self.drill_proxy(req)
 
     def btn_drill_short_stop_on_click(self):
         req = JrkCmdRequest()
-        req.name = 'top_short'
+        req.name = 'top_long'
         req.target_value = 0.0
         print(req)
         self.drill_proxy(req)
