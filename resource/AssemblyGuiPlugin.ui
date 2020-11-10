@@ -15,7 +15,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="4" column="0" colspan="4">
-    <widget class="QPushButton" name="btn_drill_set_zero_18">
+    <widget class="QPushButton" name="btn_init_joint_all">
      <property name="text">
       <string>MOVE TO INITIAL JOINT FOR ALL</string>
      </property>
@@ -59,24 +59,24 @@
        </spacer>
       </item>
       <item row="6" column="1">
-       <widget class="QDoubleSpinBox" name="doubleSpinBox_3"/>
+       <widget class="QDoubleSpinBox" name="spinbox_left_gripper_width"/>
       </item>
       <item row="2" column="0" colspan="2">
-       <widget class="QPushButton" name="btn_drill_set_zero_6">
+       <widget class="QPushButton" name="btn_left_set_load_zero">
         <property name="text">
          <string>SET LOAD ZERO</string>
         </property>
        </widget>
       </item>
       <item row="4" column="0" colspan="2">
-       <widget class="QPushButton" name="btn_drill_set_zero_8">
+       <widget class="QPushButton" name="btn_left_gripper_open">
         <property name="text">
          <string>GRIPPER OPEN</string>
         </property>
        </widget>
       </item>
       <item row="7" column="0" colspan="2">
-       <widget class="QPushButton" name="btn_drill_set_zero_9">
+       <widget class="QPushButton" name="btn_left_gripper_close">
         <property name="text">
          <string>GRIPPER CLOSE</string>
         </property>
@@ -93,7 +93,7 @@
        </widget>
       </item>
       <item row="5" column="1">
-       <widget class="QDoubleSpinBox" name="doubleSpinBox"/>
+       <widget class="QDoubleSpinBox" name="spinbox_left_gripper_force"/>
       </item>
       <item row="6" column="0">
        <widget class="QLabel" name="label_2">
@@ -119,14 +119,14 @@
        </spacer>
       </item>
       <item row="1" column="0" colspan="2">
-       <widget class="QPushButton" name="btn_drill_set_zero_5">
+       <widget class="QPushButton" name="btn_left_set_load_drill">
         <property name="text">
          <string>SET LOAD DRILL</string>
         </property>
        </widget>
       </item>
       <item row="9" column="0" colspan="2">
-       <widget class="QPushButton" name="btn_drill_set_zero_21">
+       <widget class="QPushButton" name="btn_left_init_joint">
         <property name="text">
          <string>MOVE TO INITIAL JOINT</string>
         </property>
@@ -158,24 +158,24 @@
        </spacer>
       </item>
       <item row="6" column="1">
-       <widget class="QDoubleSpinBox" name="doubleSpinBox_4"/>
+       <widget class="QDoubleSpinBox" name="spinbox_right_gripper_width"/>
       </item>
       <item row="2" column="0" colspan="2">
-       <widget class="QPushButton" name="btn_drill_set_zero_7">
+       <widget class="QPushButton" name="btn_right_set_load_zero">
         <property name="text">
          <string>SET LOAD ZERO</string>
         </property>
        </widget>
       </item>
       <item row="4" column="0" colspan="2">
-       <widget class="QPushButton" name="btn_drill_set_zero_10">
+       <widget class="QPushButton" name="btn_right_gripper_open">
         <property name="text">
          <string>GRIPPER OPEN</string>
         </property>
        </widget>
       </item>
       <item row="7" column="0" colspan="2">
-       <widget class="QPushButton" name="btn_drill_set_zero_11">
+       <widget class="QPushButton" name="btn_right_gripper_close">
         <property name="text">
          <string>GRIPPER CLOSE</string>
         </property>
@@ -192,7 +192,7 @@
        </widget>
       </item>
       <item row="5" column="1">
-       <widget class="QDoubleSpinBox" name="doubleSpinBox_2"/>
+       <widget class="QDoubleSpinBox" name="spinbox_right_gripper_force"/>
       </item>
       <item row="6" column="0">
        <widget class="QLabel" name="label_4">
@@ -218,14 +218,14 @@
        </spacer>
       </item>
       <item row="1" column="0" colspan="2">
-       <widget class="QPushButton" name="btn_drill_set_zero_12">
+       <widget class="QPushButton" name="btn_right_set_load_drill">
         <property name="text">
          <string>SET LOAD DRILL</string>
         </property>
        </widget>
       </item>
       <item row="9" column="0" colspan="2">
-       <widget class="QPushButton" name="btn_drill_set_zero_22">
+       <widget class="QPushButton" name="btn_right_init_joint">
         <property name="text">
          <string>MOVE TO INITIAL JOINT</string>
         </property>
@@ -287,14 +287,14 @@
        </widget>
       </item>
       <item row="0" column="0" colspan="2">
-       <widget class="QPushButton" name="btn_drill_set_zero_23">
+       <widget class="QPushButton" name="btn_drill_long_run">
         <property name="text">
          <string>RUN DRILL</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QDoubleSpinBox" name="doubleSpinBox_8"/>
+       <widget class="QDoubleSpinBox" name="spinbox_drill_long_power"/>
       </item>
      </layout>
     </widget>
@@ -309,7 +309,7 @@
      </property>
      <layout class="QGridLayout" name="gridLayout_7">
       <item row="1" column="1">
-       <widget class="QDoubleSpinBox" name="doubleSpinBox_9"/>
+       <widget class="QDoubleSpinBox" name="spinbox_drill_short_power"/>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_8">
@@ -342,7 +342,7 @@
        </widget>
       </item>
       <item row="0" column="0" colspan="2">
-       <widget class="QPushButton" name="btn_drill_set_zero_25">
+       <widget class="QPushButton" name="btn_drill_short_run">
         <property name="text">
          <string>RUN DRILL</string>
         </property>
@@ -374,24 +374,24 @@
        </spacer>
       </item>
       <item row="6" column="1">
-       <widget class="QDoubleSpinBox" name="doubleSpinBox_5"/>
+       <widget class="QDoubleSpinBox" name="spinbox_top_gripper_width"/>
       </item>
       <item row="2" column="0" colspan="2">
-       <widget class="QPushButton" name="btn_drill_set_zero_13">
+       <widget class="QPushButton" name="btn_top_set_load_zero">
         <property name="text">
          <string>SET LOAD ZERO</string>
         </property>
        </widget>
       </item>
       <item row="4" column="0" colspan="2">
-       <widget class="QPushButton" name="btn_drill_set_zero_14">
+       <widget class="QPushButton" name="btn_top_gripper_open">
         <property name="text">
          <string>GRIPPER OPEN</string>
         </property>
        </widget>
       </item>
       <item row="7" column="0" colspan="2">
-       <widget class="QPushButton" name="btn_drill_set_zero_16">
+       <widget class="QPushButton" name="btn_top_gripper_close">
         <property name="text">
          <string>GRIPPER CLOSE</string>
         </property>
@@ -408,7 +408,7 @@
        </widget>
       </item>
       <item row="5" column="1">
-       <widget class="QDoubleSpinBox" name="doubleSpinBox_6"/>
+       <widget class="QDoubleSpinBox" name="spinbox_top_gripper_force"/>
       </item>
       <item row="6" column="0">
        <widget class="QLabel" name="label_6">
@@ -434,14 +434,14 @@
        </spacer>
       </item>
       <item row="1" column="0" colspan="2">
-       <widget class="QPushButton" name="btn_drill_set_zero_17">
+       <widget class="QPushButton" name="btn_top_set_load_drill">
         <property name="text">
          <string>SET LOAD DRILL</string>
         </property>
        </widget>
       </item>
       <item row="9" column="0" colspan="2">
-       <widget class="QPushButton" name="btn_drill_set_zero_24">
+       <widget class="QPushButton" name="btn_top_init_joint">
         <property name="text">
          <string>MOVE TO INITIAL JOINT</string>
         </property>
@@ -451,7 +451,7 @@
     </widget>
    </item>
    <item row="3" column="0" colspan="4">
-    <widget class="QPushButton" name="btn_drill_set_zero_15">
+    <widget class="QPushButton" name="btn_unlock_error">
      <property name="text">
       <string>UNLOCK ERROR</string>
      </property>
