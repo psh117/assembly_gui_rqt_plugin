@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>assembly_gui_rqt_plugin</name>
+  <version>0.0.0</version>
+  <description>The assembly_gui_rqt_plugin package</description>
+
+  <maintainer email="psh117@snu.ac.kr">Suhan Park</maintainer>
+
+  <license>BSD</license>
+
+
+  <author email="psh117@snu.ac.kr">Suhan Park</author>
+
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>rqt_gui_py</build_depend>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>rqt_gui_py</exec_depend>
+
+  <export>
+    <rqt_gui plugin="${prefix}/plugin.xml"/>
+  </export>
+</package>
