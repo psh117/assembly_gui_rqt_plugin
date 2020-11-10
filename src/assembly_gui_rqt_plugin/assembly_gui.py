@@ -129,7 +129,7 @@ class AssemblyGuiPlugin(Plugin):
     def btn_top_gripper_open_on_click(self):
         req = MoveRequest(hand = ['panda_top'],
                           max_current = [0.0],
-                          length = [self._widget.spinbox_top_gripper_width.value()])
+                          length = [0.075])
         print(req)
         self.dxl_gripper_proxy(req)
 
@@ -171,7 +171,7 @@ class AssemblyGuiPlugin(Plugin):
     def btn_right_gripper_open_on_click(self):
         req = MoveRequest(hand = ['panda_right'],
                           max_current = [0.0],
-                          length = [self._widget.spinbox_right_gripper_width.value()])
+                          length = [0.075])
         print(req)
         self.dxl_gripper_proxy(req)
 
