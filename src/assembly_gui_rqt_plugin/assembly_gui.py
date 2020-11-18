@@ -18,6 +18,8 @@ from franka_msgs.srv import SetLoad, SetLoadRequest
 from franka_msgs.msg import ErrorRecoveryAction, ErrorRecoveryActionGoal
 from controller_manager_msgs.srv import SwitchController, SwitchControllerRequest
 from assembly_dxl_gripper.srv import Move, MoveRequest
+from assembly_task_manager.params.default_parameters import short_bolt_drill_load, long_bolt_drill_load, side_left_load, side_right_load
+from assembly_task_manager.params.default_parameters import long_load, short_load, middle_load, bottom_load, chair_load
 import actionlib
 
 class AssemblyGuiPlugin(Plugin):
@@ -59,6 +61,19 @@ class AssemblyGuiPlugin(Plugin):
         # Add widget to the user interface
         context.add_widget(self._widget)
 
+        item_list = ['zero','drill_short','drill_long','side_left','side_right','long','short','middle','bottom','chair']
+        self.load_dict = {}
+        self.load_dict['zero'] = SetLoadRequest(mass=0.0, F_x_center_load = [0.0, 0.0, 0.0])
+        self.load_dict['drill_short'] = short_bolt_drill_load
+        self.load_dict['drill_long'] = long_bolt_drill_load
+        self.load_dict['side_left'] = side_left_load
+        self.load_dict['side_right'] = side_right_load
+        self.load_dict['long'] = long_load
+        self.load_dict['short'] = short_load
+        self.load_dict['middle'] = middle_load
+        self.load_dict['bottom'] = bottom_load
+        self.load_dict['chair'] = chair_load
+
         self.drill_proxy = rospy.ServiceProxy('/jrk_cmd', JrkCmd)
         self.idle_proxy = rospy.ServiceProxy('/assembly_dual_controller/idle_control',IdleControl)
         self.switch_proxy = rospy.ServiceProxy('/panda_dual/controller_manager/switch_controller',SwitchController)
@@ -81,41 +96,26 @@ class AssemblyGuiPlugin(Plugin):
         self._widget.btn_left_gripper_close.pressed.connect(self.btn_left_gripper_close_on_click)
         self._widget.btn_left_gripper_open.pressed.connect(self.btn_left_gripper_open_on_click)
         self._widget.btn_left_init_joint.pressed.connect(self.btn_left_init_joint_on_click)
-        self._widget.btn_left_set_load_drill.pressed.connect(self.btn_left_set_load_drill_on_click)
-        self._widget.btn_left_set_load_side.pressed.connect(self.btn_left_set_load_side_on_click)
+        self._widget.btn_left_set_load.pressed.connect(self.btn_left_set_load_on_click)
         self._widget.btn_left_set_load_zero.pressed.connect(self.btn_left_set_load_zero_on_click)
 
         self._widget.btn_right_gripper_close.pressed.connect(self.btn_right_gripper_close_on_click)
         self._widget.btn_right_gripper_open.pressed.connect(self.btn_right_gripper_open_on_click)
         self._widget.btn_right_init_joint.pressed.connect(self.btn_right_init_joint_on_click)
-        self._widget.btn_right_set_load_drill.pressed.connect(self.btn_right_set_load_drill_on_click)
-        self._widget.btn_right_set_load_side.pressed.connect(self.btn_right_set_load_side_on_click)
+        self._widget.btn_right_set_load.pressed.connect(self.btn_right_set_load_on_click)
         self._widget.btn_right_set_load_zero.pressed.connect(self.btn_right_set_load_zero_on_click)
 
         self._widget.btn_top_gripper_close.pressed.connect(self.btn_top_gripper_close_on_click)
         self._widget.btn_top_gripper_open.pressed.connect(self.btn_top_gripper_open_on_click)
         self._widget.btn_top_init_joint.pressed.connect(self.btn_top_init_joint_on_click)
-        self._widget.btn_top_set_load_drill.pressed.connect(self.btn_top_set_load_drill_on_click)
-        self._widget.btn_top_set_load_side.pressed.connect(self.btn_top_set_load_side_on_click)
+        self._widget.btn_top_set_load.pressed.connect(self.btn_top_set_load_on_click)
         self._widget.btn_top_set_load_zero.pressed.connect(self.btn_top_set_load_zero_on_click)
 
         self._widget.btn_init_joint_all.pressed.connect(self.btn_init_joint_all_on_click)
-
-    def btn_top_set_load_side_on_click(self):
-        req = SetLoadRequest(mass=0.904,
-                             F_x_center_load = [0.00, -0.05, 0.0825])
-        stop = SwitchControllerRequest(stop_controllers=['assembly_triple_controller'],
-                                       strictness = 2)
-        start = SwitchControllerRequest(start_controllers=['assembly_triple_controller'],
-                                       strictness = 2)
-        try:
-            self.switch_proxy(stop)
-            rospy.sleep(0.5)
-            self.top_load_proxy(req)
-            self.switch_proxy(start)
-            self._widget.textBrowser.append("TOP: set_load_side")
-        except:
-            self._widget.textBrowser.append("SERVER NOT WORKING -- TOP: set_load_side")
+        for item in item_list:
+            self._widget.combo_left_load_item.addItem(item)
+            self._widget.combo_right_load_item.addItem(item)
+            self._widget.combo_top_load_item.addItem(item)
 
     def btn_top_set_load_zero_on_click(self):
         req = SetLoadRequest(mass=0.0)
@@ -132,9 +132,9 @@ class AssemblyGuiPlugin(Plugin):
         except:
             self._widget.textBrowser.append("SERVER NOT WORKING -- TOP: set_load_zero")
 
-    def btn_top_set_load_drill_on_click(self):
-        req = SetLoadRequest(mass=1.114,
-                             F_x_center_load = [0.00, 0.0, 0.0415])
+    def btn_top_set_load_on_click(self):
+        item = self._widget.combo_top_load_item.currentText()
+        req = self.load_dict[item]
         stop = SwitchControllerRequest(stop_controllers=['assembly_triple_controller'],
                                        strictness = 2)
         start = SwitchControllerRequest(start_controllers=['assembly_triple_controller'],
@@ -144,9 +144,10 @@ class AssemblyGuiPlugin(Plugin):
             rospy.sleep(0.5)
             self.top_load_proxy(req)
             self.switch_proxy(start)
-            self._widget.textBrowser.append("TOP: set_load_drill")
+            self._widget.textBrowser.append("TOP: set_load_"+item)
+            self._widget.textBrowser.append(str(self.load_dict[item]))
         except:
-            self._widget.textBrowser.append("SERVER NOT WORKING -- TOP: set_load_drill")
+            self._widget.textBrowser.append("SERVER NOT WORKING -- TOP: set_load")
 
     def btn_top_init_joint_on_click(self):
         pass
@@ -173,22 +174,6 @@ class AssemblyGuiPlugin(Plugin):
         except:
             self._widget.textBrowser.append("SERVER NOT WORKING -- TOP: gripper_close")
 
-    def btn_right_set_load_side_on_click(self):
-        req = SetLoadRequest(mass=0.904,
-                             F_x_center_load = [0.00, -0.05, 0.0825])
-        stop = SwitchControllerRequest(stop_controllers=['assembly_triple_controller'],
-                                       strictness = 2)
-        start = SwitchControllerRequest(start_controllers=['assembly_triple_controller'],
-                                       strictness = 2)
-        try:
-            self.switch_proxy(stop)
-            rospy.sleep(0.5)
-            self.right_load_proxy(req)
-            self.switch_proxy(start)
-            self._widget.textBrowser.append("RIGHT: set_load_side")
-        except:
-            self._widget.textBrowser.append("SERVER NOT WORKING -- RIGHT: set_load_side")
-
     def btn_right_set_load_zero_on_click(self):
         req = SetLoadRequest(mass=0.0)
         stop = SwitchControllerRequest(stop_controllers=['assembly_triple_controller'],
@@ -204,9 +189,9 @@ class AssemblyGuiPlugin(Plugin):
         except:
             self._widget.textBrowser.append("SERVER NOT WORKING -- RIGHT: set_load_zero")
 
-    def btn_right_set_load_drill_on_click(self):
-        req = SetLoadRequest(mass=1.114,
-                             F_x_center_load = [-0.01, 0.0, 0.0415])
+    def btn_right_set_load_on_click(self):
+        item = self._widget.combo_right_load_item.currentText()
+        req = self.load_dict[item]
         stop = SwitchControllerRequest(stop_controllers=['assembly_triple_controller'],
                                        strictness = 2)
         start = SwitchControllerRequest(start_controllers=['assembly_triple_controller'],
@@ -216,9 +201,10 @@ class AssemblyGuiPlugin(Plugin):
             rospy.sleep(0.5)
             self.right_load_proxy(req)
             self.switch_proxy(start)
-            self._widget.textBrowser.append("RIGHT: set_load_drill")
+            self._widget.textBrowser.append("RIGHT: set_load_"+item)
+            self._widget.textBrowser.append(str(self.load_dict[item]))
         except:
-            self._widget.textBrowser.append("SERVER NOT WORKING -- RIGHT: set_load_drill")
+            self._widget.textBrowser.append("SERVER NOT WORKING -- RIGHT: set_load_"+item)
 
     def btn_right_init_joint_on_click(self):
         pass
@@ -245,22 +231,6 @@ class AssemblyGuiPlugin(Plugin):
         except:
             self._widget.textBrowser.append("SERVER NOT WORKING -- RIGHT: gripper_close")
 
-    def btn_left_set_load_side_on_click(self):
-        req = SetLoadRequest(mass=0.904,
-                             F_x_center_load = [0.00, -0.05, 0.0825])
-        stop = SwitchControllerRequest(stop_controllers=['assembly_triple_controller'],
-                                       strictness = 2)
-        start = SwitchControllerRequest(start_controllers=['assembly_triple_controller'],
-                                       strictness = 2)
-        try:
-            self.switch_proxy(stop)
-            rospy.sleep(0.5)
-            self.left_load_proxy(req)
-            self.switch_proxy(start)
-            self._widget.textBrowser.append("LEFT: set_load_side")
-        except:
-            self._widget.textBrowser.append("SERVER NOT WORKING -- LEFT: set_load_side")
-
     def btn_left_set_load_zero_on_click(self):
         req = SetLoadRequest(mass=0.0)
         stop = SwitchControllerRequest(stop_controllers=['assembly_triple_controller'],
@@ -276,8 +246,22 @@ class AssemblyGuiPlugin(Plugin):
         except:
             self._widget.textBrowser.append("SERVER NOT WORKING -- LEFT: set_load_zero")
 
-    def btn_left_set_load_drill_on_click(self):
-        self._widget.textBrowser.append("LEFT: set_load_drill is a dummy button!")
+    def btn_left_set_load_on_click(self):
+        item = self._widget.combo_left_load_item.currentText()
+        req = self.load_dict[item]
+        stop = SwitchControllerRequest(stop_controllers=['assembly_triple_controller'],
+                                       strictness = 2)
+        start = SwitchControllerRequest(start_controllers=['assembly_triple_controller'],
+                                       strictness = 2)
+        try:
+            self.switch_proxy(stop)
+            rospy.sleep(0.5)
+            self.left_load_proxy(req)
+            self.switch_proxy(start)
+            self._widget.textBrowser.append("LEFT: set_load_"+item)
+            self._widget.textBrowser.append(str(self.load_dict[item]))
+        except:
+            self._widget.textBrowser.append("SERVER NOT WORKING -- LEFT: set_load_"+item)
 
     def btn_left_init_joint_on_click(self):
         pass
