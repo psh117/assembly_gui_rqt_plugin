@@ -82,21 +82,40 @@ class AssemblyGuiPlugin(Plugin):
         self._widget.btn_left_gripper_open.pressed.connect(self.btn_left_gripper_open_on_click)
         self._widget.btn_left_init_joint.pressed.connect(self.btn_left_init_joint_on_click)
         self._widget.btn_left_set_load_drill.pressed.connect(self.btn_left_set_load_drill_on_click)
+        self._widget.btn_left_set_load_side.pressed.connect(self.btn_left_set_load_side_on_click)
         self._widget.btn_left_set_load_zero.pressed.connect(self.btn_left_set_load_zero_on_click)
 
         self._widget.btn_right_gripper_close.pressed.connect(self.btn_right_gripper_close_on_click)
         self._widget.btn_right_gripper_open.pressed.connect(self.btn_right_gripper_open_on_click)
         self._widget.btn_right_init_joint.pressed.connect(self.btn_right_init_joint_on_click)
         self._widget.btn_right_set_load_drill.pressed.connect(self.btn_right_set_load_drill_on_click)
+        self._widget.btn_right_set_load_side.pressed.connect(self.btn_right_set_load_side_on_click)
         self._widget.btn_right_set_load_zero.pressed.connect(self.btn_right_set_load_zero_on_click)
 
         self._widget.btn_top_gripper_close.pressed.connect(self.btn_top_gripper_close_on_click)
         self._widget.btn_top_gripper_open.pressed.connect(self.btn_top_gripper_open_on_click)
         self._widget.btn_top_init_joint.pressed.connect(self.btn_top_init_joint_on_click)
         self._widget.btn_top_set_load_drill.pressed.connect(self.btn_top_set_load_drill_on_click)
+        self._widget.btn_top_set_load_side.pressed.connect(self.btn_top_set_load_side_on_click)
         self._widget.btn_top_set_load_zero.pressed.connect(self.btn_top_set_load_zero_on_click)
 
         self._widget.btn_init_joint_all.pressed.connect(self.btn_init_joint_all_on_click)
+
+    def btn_top_set_load_side_on_click(self):
+        req = SetLoadRequest(mass=0.904,
+                             F_x_center_load = [0.00, -0.05, 0.0825])
+        stop = SwitchControllerRequest(stop_controllers=['assembly_triple_controller'],
+                                       strictness = 2)
+        start = SwitchControllerRequest(start_controllers=['assembly_triple_controller'],
+                                       strictness = 2)
+        try:
+            self.switch_proxy(stop)
+            rospy.sleep(0.5)
+            self.top_load_proxy(req)
+            self.switch_proxy(start)
+            self._widget.textBrowser.append("TOP: set_load_side")
+        except:
+            self._widget.textBrowser.append("SERVER NOT WORKING -- TOP: set_load_side")
 
     def btn_top_set_load_zero_on_click(self):
         req = SetLoadRequest(mass=0.0)
@@ -104,11 +123,14 @@ class AssemblyGuiPlugin(Plugin):
                                        strictness = 2)
         start = SwitchControllerRequest(start_controllers=['assembly_triple_controller'],
                                        strictness = 2)
-        print(req)
-        self.switch_proxy(stop)
-        rospy.sleep(0.5)
-        self.top_load_proxy(req)
-        self.switch_proxy(start)
+        try:
+            self.switch_proxy(stop)
+            rospy.sleep(0.5)
+            self.top_load_proxy(req)
+            self.switch_proxy(start)
+            self._widget.textBrowser.append("TOP: set_load_zero")
+        except:
+            self._widget.textBrowser.append("SERVER NOT WORKING -- TOP: set_load_zero")
 
     def btn_top_set_load_drill_on_click(self):
         req = SetLoadRequest(mass=1.114,
@@ -117,11 +139,14 @@ class AssemblyGuiPlugin(Plugin):
                                        strictness = 2)
         start = SwitchControllerRequest(start_controllers=['assembly_triple_controller'],
                                        strictness = 2)
-        print(req)
-        self.switch_proxy(stop)
-        rospy.sleep(0.5)
-        self.top_load_proxy(req)
-        self.switch_proxy(start)
+        try:
+            self.switch_proxy(stop)
+            rospy.sleep(0.5)
+            self.top_load_proxy(req)
+            self.switch_proxy(start)
+            self._widget.textBrowser.append("TOP: set_load_drill")
+        except:
+            self._widget.textBrowser.append("SERVER NOT WORKING -- TOP: set_load_drill")
 
     def btn_top_init_joint_on_click(self):
         pass
@@ -130,15 +155,39 @@ class AssemblyGuiPlugin(Plugin):
         req = MoveRequest(hand = ['panda_top'],
                           max_current = [0.0],
                           length = [0.075])
-        print(req)
-        self.dxl_gripper_proxy(req)
+        try:
+            self.dxl_gripper_proxy(req)
+            self._widget.textBrowser.append("TOP: gripper_open")
+        except:
+            self._widget.textBrowser.append("SERVER NOT WORKING -- TOP: gripper_open")
 
     def btn_top_gripper_close_on_click(self):
+        current = self._widget.spinbox_top_gripper_force.value()
+        length = self._widget.spinbox_top_gripper_width.value()
         req = MoveRequest(hand = ['panda_top'],
-                          max_current = [self._widget.spinbox_top_gripper_force.value()],
-                          length = [self._widget.spinbox_top_gripper_width.value()])
-        print(req)
-        self.dxl_gripper_proxy(req)
+                          max_current = [current],
+                          length = [length])
+        try:
+            self.dxl_gripper_proxy(req)
+            self._widget.textBrowser.append("TOP: gripper_close | current: "+str(current)+" | length: "+str(length))
+        except:
+            self._widget.textBrowser.append("SERVER NOT WORKING -- TOP: gripper_close")
+
+    def btn_right_set_load_side_on_click(self):
+        req = SetLoadRequest(mass=0.904,
+                             F_x_center_load = [0.00, -0.05, 0.0825])
+        stop = SwitchControllerRequest(stop_controllers=['assembly_triple_controller'],
+                                       strictness = 2)
+        start = SwitchControllerRequest(start_controllers=['assembly_triple_controller'],
+                                       strictness = 2)
+        try:
+            self.switch_proxy(stop)
+            rospy.sleep(0.5)
+            self.right_load_proxy(req)
+            self.switch_proxy(start)
+            self._widget.textBrowser.append("RIGHT: set_load_side")
+        except:
+            self._widget.textBrowser.append("SERVER NOT WORKING -- RIGHT: set_load_side")
 
     def btn_right_set_load_zero_on_click(self):
         req = SetLoadRequest(mass=0.0)
@@ -146,11 +195,14 @@ class AssemblyGuiPlugin(Plugin):
                                        strictness = 2)
         start = SwitchControllerRequest(start_controllers=['assembly_triple_controller'],
                                        strictness = 2)
-        print(req)
-        self.switch_proxy(stop)
-        rospy.sleep(0.5)
-        self.right_load_proxy(req)
-        self.switch_proxy(start)
+        try:
+            self.switch_proxy(stop)
+            rospy.sleep(0.5)
+            self.right_load_proxy(req)
+            self.switch_proxy(start)
+            self._widget.textBrowser.append("RIGHT: set_load_zero")
+        except:
+            self._widget.textBrowser.append("SERVER NOT WORKING -- RIGHT: set_load_zero")
 
     def btn_right_set_load_drill_on_click(self):
         req = SetLoadRequest(mass=1.114,
@@ -159,11 +211,14 @@ class AssemblyGuiPlugin(Plugin):
                                        strictness = 2)
         start = SwitchControllerRequest(start_controllers=['assembly_triple_controller'],
                                        strictness = 2)
-        print(req)
-        self.switch_proxy(stop)
-        rospy.sleep(0.5)
-        self.right_load_proxy(req)
-        self.switch_proxy(start)
+        try:
+            self.switch_proxy(stop)
+            rospy.sleep(0.5)
+            self.right_load_proxy(req)
+            self.switch_proxy(start)
+            self._widget.textBrowser.append("RIGHT: set_load_drill")
+        except:
+            self._widget.textBrowser.append("SERVER NOT WORKING -- RIGHT: set_load_drill")
 
     def btn_right_init_joint_on_click(self):
         pass
@@ -172,15 +227,39 @@ class AssemblyGuiPlugin(Plugin):
         req = MoveRequest(hand = ['panda_right'],
                           max_current = [0.0],
                           length = [0.075])
-        print(req)
-        self.dxl_gripper_proxy(req)
+        try:
+            self.dxl_gripper_proxy(req)
+            self._widget.textBrowser.append("RIGHT: gripper_open")
+        except:
+            self._widget.textBrowser.append("SERVER NOT WORKING -- RIGHT: gripper_open")
 
     def btn_right_gripper_close_on_click(self):
+        current = self._widget.spinbox_right_gripper_force.value()
+        length = self._widget.spinbox_right_gripper_width.value()
         req = MoveRequest(hand = ['panda_right'],
-                          max_current = [self._widget.spinbox_right_gripper_force.value()],
-                          length = [self._widget.spinbox_right_gripper_width.value()])
-        print(req)
-        self.dxl_gripper_proxy(req)
+                          max_current = [current],
+                          length = [length])
+        try:
+            self.dxl_gripper_proxy(req)
+            self._widget.textBrowser.append("RIGHT: gripper_close | current: "+str(current)+" | length: "+str(length))
+        except:
+            self._widget.textBrowser.append("SERVER NOT WORKING -- RIGHT: gripper_close")
+
+    def btn_left_set_load_side_on_click(self):
+        req = SetLoadRequest(mass=0.904,
+                             F_x_center_load = [0.00, -0.05, 0.0825])
+        stop = SwitchControllerRequest(stop_controllers=['assembly_triple_controller'],
+                                       strictness = 2)
+        start = SwitchControllerRequest(start_controllers=['assembly_triple_controller'],
+                                       strictness = 2)
+        try:
+            self.switch_proxy(stop)
+            rospy.sleep(0.5)
+            self.left_load_proxy(req)
+            self.switch_proxy(start)
+            self._widget.textBrowser.append("LEFT: set_load_side")
+        except:
+            self._widget.textBrowser.append("SERVER NOT WORKING -- LEFT: set_load_side")
 
     def btn_left_set_load_zero_on_click(self):
         req = SetLoadRequest(mass=0.0)
@@ -188,14 +267,17 @@ class AssemblyGuiPlugin(Plugin):
                                        strictness = 2)
         start = SwitchControllerRequest(start_controllers=['assembly_triple_controller'],
                                        strictness = 2)
-        print(req)
-        self.switch_proxy(stop)
-        rospy.sleep(0.5)
-        self.left_load_proxy(req)
-        self.switch_proxy(start)
+        try:
+            self.switch_proxy(stop)
+            rospy.sleep(0.5)
+            self.left_load_proxy(req)
+            self.switch_proxy(start)
+            self._widget.textBrowser.append("LEFT: set_load_zero")
+        except:
+            self._widget.textBrowser.append("SERVER NOT WORKING -- LEFT: set_load_zero")
 
     def btn_left_set_load_drill_on_click(self):
-        print("---not working---")
+        self._widget.textBrowser.append("LEFT: set_load_drill is a dummy button!")
 
     def btn_left_init_joint_on_click(self):
         pass
@@ -205,45 +287,65 @@ class AssemblyGuiPlugin(Plugin):
 
     def btn_left_gripper_open_on_click(self):
         req = MoveGoal(width=0.075,speed=0.1)
-        print(req)
-        self.panda_gripper_move_client.send_goal_and_wait(req)
+        try:
+            self.panda_gripper_move_client.send_goal_and_wait(req)
+            self._widget.textBrowser.append("LEFT: gripper_open")
+        except:
+            self._widget.textBrowser.append("SERVER NOT WORKING -- LEFT: gripper_open")
 
     def btn_left_gripper_close_on_click(self):
+        force = self._widget.spinbox_left_gripper_force.value()
+        length = self._widget.spinbox_left_gripper_width.value()
         epsilon = GraspEpsilon(inner=0.027, outer=0.027)
-        req = GraspGoal(width=self._widget.spinbox_left_gripper_width.value(),
+        req = GraspGoal(width=length,
                           epsilon=epsilon,
                           speed=0.1,
-                          force=self._widget.spinbox_left_gripper_force.value())
-        print(req)
-        self.panda_gripper_grasp_client.send_goal_and_wait(req)
+                          force=force)
+        try:
+            self.panda_gripper_grasp_client.send_goal_and_wait(req)
+            self._widget.textBrowser.append("LEFT: gripper_close | force: "+str(force)+" | length: "+str(length))
+        except:
+            self._widget.textBrowser.append("SERVER NOT WORKING -- LEFT: gripper_open")
 
     def btn_drill_long_run_on_click(self):
         req = JrkCmdRequest()
         req.name = 'right_long'
         req.target_value = self._widget.spinbox_drill_long_power.value()
-        print(req)
-        self.drill_proxy(req)
+        try:
+            self.drill_proxy(req)
+            self._widget.textBrowser.append("DRILL_LONG: run | power: "+str(req.target_value))
+        except:
+            self._widget.textBrowser.append("SERVER NOT WORKING -- DRILL_LONG: run")
 
     def btn_drill_long_stop_on_click(self):
         req = JrkCmdRequest()
         req.name = 'right_long'
         req.target_value = 0.0
-        print(req)
-        self.drill_proxy(req)
+        try:
+            self.drill_proxy(req)
+            self._widget.textBrowser.append("DRILL_LONG: stop")
+        except:
+            self._widget.textBrowser.append("SERVER NOT WORKING -- DRILL_LONG: stop")
 
     def btn_drill_short_run_on_click(self):
         req = JrkCmdRequest()
         req.name = 'top_long'
         req.target_value = self._widget.spinbox_drill_short_power.value()
-        print(req)
-        self.drill_proxy(req)
+        try:
+            self.drill_proxy(req)
+            self._widget.textBrowser.append("DRILL_SHORT: run | power: "+str(req.target_value))
+        except:
+            self._widget.textBrowser.append("SERVER NOT WORKING -- DRILL_SHORT: run")
 
     def btn_drill_short_stop_on_click(self):
         req = JrkCmdRequest()
         req.name = 'top_long'
         req.target_value = 0.0
-        print(req)
-        self.drill_proxy(req)
+        try:
+            self.drill_proxy(req)
+            self._widget.textBrowser.append("DRILL_SHORT: stop")
+        except:
+            self._widget.textBrowser.append("SERVER NOT WORKING -- DRILL_SHORT: stop")
 
     def btn_unlock_error_on_click(self):
         idle_control_l0 = IdleControlRequest()
@@ -263,13 +365,17 @@ class AssemblyGuiPlugin(Plugin):
         idle_control_t2.mode = 2
         error_recovery_goal = ErrorRecoveryActionGoal()
 
-        self.idle_proxy(idle_control_l0)
-        self.idle_proxy(idle_control_r0)
-        self.idle_proxy(idle_control_t0)
-        self.idle_proxy(idle_control_l2)
-        self.idle_proxy(idle_control_r2)
-        self.idle_proxy(idle_control_t2)
-        self.error_recov_client.send_goal_and_wait(error_recovery_goal)
+        try:
+            self.idle_proxy(idle_control_l0)
+            self.idle_proxy(idle_control_r0)
+            self.idle_proxy(idle_control_t0)
+            self.idle_proxy(idle_control_l2)
+            self.idle_proxy(idle_control_r2)
+            self.idle_proxy(idle_control_t2)
+            self.error_recov_client.send_goal_and_wait(error_recovery_goal)
+            self._widget.textBrowser.append("UNLOCK_ERROR")
+        except:
+            self._widget.textBrowser.append("SERVER NOT WORKING -- UNLOCK_ERROR")
 
     def shutdown_plugin(self):
         # TODO unregister all publishers here
