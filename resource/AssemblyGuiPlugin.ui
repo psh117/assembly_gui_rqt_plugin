@@ -562,7 +562,7 @@
       <property name="geometry">
        <rect>
         <x>50</x>
-        <y>70</y>
+        <y>100</y>
         <width>151</width>
         <height>25</height>
        </rect>
@@ -572,7 +572,7 @@
       <property name="geometry">
        <rect>
         <x>50</x>
-        <y>30</y>
+        <y>60</y>
         <width>151</width>
         <height>25</height>
        </rect>
@@ -582,7 +582,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>30</y>
+        <y>60</y>
         <width>41</width>
         <height>21</height>
        </rect>
@@ -595,13 +595,39 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>70</y>
+        <y>100</y>
         <width>41</width>
         <height>21</height>
        </rect>
       </property>
       <property name="text">
        <string>KILL</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_comp_">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>30</y>
+        <width>151</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>comp_</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_15">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>41</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>FIND</string>
       </property>
      </widget>
     </widget>

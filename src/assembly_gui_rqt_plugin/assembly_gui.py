@@ -21,19 +21,19 @@ from controller_manager_msgs.srv import SwitchController, SwitchControllerReques
 from assembly_dxl_gripper.srv import Move, MoveRequest
 import actionlib
 from actionlib_msgs.msg import GoalStatus
-# from assembly_task_manager.params.default_parameters import short_bolt_drill_load, long_bolt_drill_load, side_left_load, side_right_load
-# from assembly_task_manager.params.default_parameters import long_load, short_load, middle_load, bottom_load, chair_load
+from assembly_task_manager.params.default_parameters import short_bolt_drill_load, long_bolt_drill_load, side_left_load, side_right_load
+from assembly_task_manager.params.default_parameters import long_load, short_load, middle_load, bottom_load, chair_load
 
-## when testing -- not using default_parameters
-short_bolt_drill_load = SetLoadRequest(mass=0.0, F_x_center_load = [0.0, 0.0, 0.0])
-long_bolt_drill_load = short_bolt_drill_load
-side_left_load = short_bolt_drill_load
-side_right_load = short_bolt_drill_load
-long_load = short_bolt_drill_load
-short_load = short_bolt_drill_load
-middle_load = short_bolt_drill_load
-bottom_load = short_bolt_drill_load
-chair_load = short_bolt_drill_load
+# ## when testing -- not using default_parameters
+# short_bolt_drill_load = SetLoadRequest(mass=0.0, F_x_center_load = [0.0, 0.0, 0.0])
+# long_bolt_drill_load = short_bolt_drill_load
+# side_left_load = short_bolt_drill_load
+# side_right_load = short_bolt_drill_load
+# long_load = short_bolt_drill_load
+# short_load = short_bolt_drill_load
+# middle_load = short_bolt_drill_load
+# bottom_load = short_bolt_drill_load
+# chair_load = short_bolt_drill_load
 
 class AssemblyGuiPlugin(Plugin):
 
@@ -125,6 +125,7 @@ class AssemblyGuiPlugin(Plugin):
         self._widget.btn_top_set_load_zero.pressed.connect(self.btn_top_set_load_zero_on_click)
 
         # self._widget.btn_run.pressed.connect(self.btn_run_on_click)
+        self._widget.btn_comp_.pressed.connect(self.btn_comp_on_click)
         self._widget.line_find.returnPressed.connect(self.line_find_pressed)
         self._widget.line_kill.returnPressed.connect(self.line_kill_pressed)
 
@@ -144,6 +145,14 @@ class AssemblyGuiPlugin(Plugin):
 
     def line_find_pressed(self):
         cmd = ['ps -Af | grep '+self._widget.line_find.text()]
+        sub_return = subprocess.Popen(cmd, shell=True ,stdout=subprocess.PIPE)
+        output = sub_return.stdout.read()
+        self._widget.textBrowser.append("search result---------")
+        self._widget.textBrowser.append(output[:-1])
+        self._widget.textBrowser.append("---------search result")
+
+    def btn_comp_on_click(self):
+        cmd = ['ps -Af | grep comp_']
         sub_return = subprocess.Popen(cmd, shell=True ,stdout=subprocess.PIPE)
         output = sub_return.stdout.read()
         self._widget.textBrowser.append("search result---------")
@@ -322,7 +331,7 @@ class AssemblyGuiPlugin(Plugin):
         req = MoveGoal(width=0.075,speed=0.1)
 
         if self.panda_gripper_grasp_client.wait_for_server(rospy.Duration(1.0)):
-            self.panda_gripper_move_client.send_goal_and_wait(req)
+            self.panda_gripper_move_client.send_goal(req)
             self._widget.textBrowser.append("LEFT: gripper_open")
         else:
             self._widget.textBrowser.append("SERVER NOT WORKING -- LEFT: gripper_open")
@@ -337,7 +346,7 @@ class AssemblyGuiPlugin(Plugin):
                           speed=0.1,
                           force=force)
         if self.panda_gripper_grasp_client.wait_for_server(rospy.Duration(1.0)):
-            self.panda_gripper_grasp_client.send_goal_and_wait(req)
+            self.panda_gripper_grasp_client.send_goal(req)
             self._widget.textBrowser.append("LEFT: gripper_close | force: "+str(force)+" | length: "+str(length))
 
         else:
@@ -409,7 +418,7 @@ class AssemblyGuiPlugin(Plugin):
             self.idle_proxy(idle_control_l2)
             self.idle_proxy(idle_control_r2)
             self.idle_proxy(idle_control_t2)
-            self.error_recov_client.send_goal_and_wait(error_recovery_goal)
+            self.error_recov_client.send_goal(error_recovery_goal)
             self._widget.textBrowser.append("UNLOCK_ERROR")
 
         else:
