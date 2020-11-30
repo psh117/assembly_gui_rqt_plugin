@@ -20,19 +20,19 @@ from controller_manager_msgs.srv import SwitchController, SwitchControllerReques
 from assembly_dxl_gripper.srv import Move, MoveRequest
 import actionlib
 from actionlib_msgs.msg import GoalStatus
-# from assembly_task_manager.params.default_parameters import short_bolt_drill_load, long_bolt_drill_load, side_left_load, side_right_load
-# from assembly_task_manager.params.default_parameters import long_load, short_load, middle_load, bottom_load, chair_load
+from assembly_task_manager.params.default_parameters import short_bolt_drill_load, long_bolt_drill_load, side_left_load, side_right_load
+from assembly_task_manager.params.default_parameters import long_load, short_load, middle_load, bottom_load, chair_load
 
-## when testing -- not using default_parameters
-short_bolt_drill_load = SetLoadRequest(mass=0.0, F_x_center_load = [0.0, 0.0, 0.0])
-long_bolt_drill_load = short_bolt_drill_load
-side_left_load = short_bolt_drill_load
-side_right_load = short_bolt_drill_load
-long_load = short_bolt_drill_load
-short_load = short_bolt_drill_load
-middle_load = short_bolt_drill_load
-bottom_load = short_bolt_drill_load
-chair_load = short_bolt_drill_load
+# ## when testing -- not using default_parameters
+# short_bolt_drill_load = SetLoadRequest(mass=0.0, F_x_center_load = [0.0, 0.0, 0.0])
+# long_bolt_drill_load = short_bolt_drill_load
+# side_left_load = short_bolt_drill_load
+# side_right_load = short_bolt_drill_load
+# long_load = short_bolt_drill_load
+# short_load = short_bolt_drill_load
+# middle_load = short_bolt_drill_load
+# bottom_load = short_bolt_drill_load
+# chair_load = short_bolt_drill_load
 
 class AssemblyGuiPlugin(Plugin):
 
@@ -308,7 +308,7 @@ class AssemblyGuiPlugin(Plugin):
             self._widget.textBrowser.append("LEFT: gripper_close | force: "+str(force)+" | length: "+str(length))
 
         else:
-            self._widget.textBrowser.append("SERVER NOT WORKING -- LEFT: gripper_open")
+            self._widget.textBrowser.append("SERVER NOT WORKING -- LEFT: gripper_close")
 
 
     def btn_drill_long_run_on_click(self):
