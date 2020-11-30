@@ -2,6 +2,7 @@ from __future__ import print_function
 import os
 import rospkg
 import rospy
+import subprocess
 
 from qt_gui.plugin import Plugin
 from python_qt_binding import loadUi
@@ -20,19 +21,19 @@ from controller_manager_msgs.srv import SwitchController, SwitchControllerReques
 from assembly_dxl_gripper.srv import Move, MoveRequest
 import actionlib
 from actionlib_msgs.msg import GoalStatus
-from assembly_task_manager.params.default_parameters import short_bolt_drill_load, long_bolt_drill_load, side_left_load, side_right_load
-from assembly_task_manager.params.default_parameters import long_load, short_load, middle_load, bottom_load, chair_load
+# from assembly_task_manager.params.default_parameters import short_bolt_drill_load, long_bolt_drill_load, side_left_load, side_right_load
+# from assembly_task_manager.params.default_parameters import long_load, short_load, middle_load, bottom_load, chair_load
 
-# ## when testing -- not using default_parameters
-# short_bolt_drill_load = SetLoadRequest(mass=0.0, F_x_center_load = [0.0, 0.0, 0.0])
-# long_bolt_drill_load = short_bolt_drill_load
-# side_left_load = short_bolt_drill_load
-# side_right_load = short_bolt_drill_load
-# long_load = short_bolt_drill_load
-# short_load = short_bolt_drill_load
-# middle_load = short_bolt_drill_load
-# bottom_load = short_bolt_drill_load
-# chair_load = short_bolt_drill_load
+## when testing -- not using default_parameters
+short_bolt_drill_load = SetLoadRequest(mass=0.0, F_x_center_load = [0.0, 0.0, 0.0])
+long_bolt_drill_load = short_bolt_drill_load
+side_left_load = short_bolt_drill_load
+side_right_load = short_bolt_drill_load
+long_load = short_bolt_drill_load
+short_load = short_bolt_drill_load
+middle_load = short_bolt_drill_load
+bottom_load = short_bolt_drill_load
+chair_load = short_bolt_drill_load
 
 class AssemblyGuiPlugin(Plugin):
 
@@ -123,15 +124,47 @@ class AssemblyGuiPlugin(Plugin):
         self._widget.btn_top_set_load.pressed.connect(self.btn_top_set_load_on_click)
         self._widget.btn_top_set_load_zero.pressed.connect(self.btn_top_set_load_zero_on_click)
 
+        # self._widget.btn_run.pressed.connect(self.btn_run_on_click)
+        self._widget.line_find.returnPressed.connect(self.line_find_pressed)
+        self._widget.line_kill.returnPressed.connect(self.line_kill_pressed)
+
         self._widget.btn_init_joint_all.pressed.connect(self.btn_init_joint_all_on_click)
         for item in item_list:
             self._widget.combo_left_load_item.addItem(item)
             self._widget.combo_right_load_item.addItem(item)
             self._widget.combo_top_load_item.addItem(item)
 
+        # run_list = ['comp_1_0_bracket_all.py','comp_1_1_bracket2.py','comp_1_2_bracket3.py','comp_1_3_bracket4.py']
+        # for item in run_list:
+        #     self._widget.combo_run.addItem(item)
+
         self._widget.textBrowser.append("---------------------------------------")
         self._widget.textBrowser.append("author: KIM-HC, psh117")
         self._widget.textBrowser.append("---------------------------------------")
+
+    def line_find_pressed(self):
+        cmd = ['ps -Af | grep '+self._widget.line_find.text()]
+        sub_return = subprocess.Popen(cmd, shell=True ,stdout=subprocess.PIPE)
+        output = sub_return.stdout.read()
+        self._widget.textBrowser.append("search result---------")
+        self._widget.textBrowser.append(output[:-1])
+        self._widget.textBrowser.append("---------search result")
+
+    def line_kill_pressed(self):
+        cmd = ['kill -9 '+self._widget.line_kill.text()]
+        subprocess.Popen(cmd, shell=True ,stdout=subprocess.PIPE)
+        self._widget.textBrowser.append("Killed")
+
+    # def btn_run_on_click(self):
+    #     item = self._widget.combo_run.currentText()
+    #     print(item)
+    #     cmd = ['terminator -e rqt']
+    #     # cmd = ['terminator -e rosrun assembly_task_manager '+item]
+    #     # cmd = ['terminator -e','rosrun assembly_task_manager '+item]
+    #     subprocess.call(cmd, shell=True)
+    #     # sub_return = subprocess.Popen(cmd, shell=True ,stdout=subprocess.PIPE)
+    #     # output = sub_return.stdout.read()
+    #     # print(output)
 
     def btn_top_set_load_zero_on_click(self):
         req = SetLoadRequest(mass=0.0)
