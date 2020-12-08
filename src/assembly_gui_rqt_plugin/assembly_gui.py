@@ -22,7 +22,7 @@ from assembly_dxl_gripper.srv import Move, MoveRequest
 import actionlib
 from actionlib_msgs.msg import GoalStatus
 from assembly_task_manager.params.default_parameters import short_bolt_drill_load, long_bolt_drill_load, side_left_load, side_right_load
-from assembly_task_manager.params.default_parameters import long_load, short_load, middle_load, bottom_load, chair_load
+from assembly_task_manager.params.default_parameters import long_load, short_load, middle_load, bottom_load, chair_load, rotate_load_div2
 
 # ## when testing -- not using default_parameters
 # short_bolt_drill_load = SetLoadRequest(mass=0.0, F_x_center_load = [0.0, 0.0, 0.0])
@@ -74,7 +74,7 @@ class AssemblyGuiPlugin(Plugin):
         # Add widget to the user interface
         context.add_widget(self._widget)
 
-        item_list = ['zero','drill_short','drill_long','side_left','side_right','long','short','middle','bottom','chair']
+        item_list = ['zero','drill_short','drill_long','side_left','side_right','long','short','middle','bottom','chair','rotate_load_div2']
         self.load_dict = {}
         self.load_dict['zero'] = SetLoadRequest(mass=0.0, F_x_center_load = [0.0, 0.0, 0.0])
         self.load_dict['drill_short'] = short_bolt_drill_load
@@ -86,6 +86,7 @@ class AssemblyGuiPlugin(Plugin):
         self.load_dict['middle'] = middle_load
         self.load_dict['bottom'] = bottom_load
         self.load_dict['chair'] = chair_load
+        self.load_dict['rotate_load_div2'] = rotate_load_div2
 
         self.drill_proxy = rospy.ServiceProxy('/jrk_cmd', JrkCmd)
         self.idle_proxy = rospy.ServiceProxy('/assembly_dual_controller/idle_control',IdleControl)
