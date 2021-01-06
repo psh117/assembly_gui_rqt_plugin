@@ -148,6 +148,7 @@ class AssemblyGuiPlugin(Plugin):
         cmd = ['ps -Af | grep '+self._widget.line_find.text()]
         sub_return = subprocess.Popen(cmd, shell=True ,stdout=subprocess.PIPE)
         output = sub_return.stdout.read()
+        self._widget.textBrowser.append("\n\n")
         self._widget.textBrowser.append("search result---------")
         self._widget.textBrowser.append(output[:-1])
         self._widget.textBrowser.append("---------search result")
@@ -156,6 +157,7 @@ class AssemblyGuiPlugin(Plugin):
         cmd = ['ps -Af | grep comp_']
         sub_return = subprocess.Popen(cmd, shell=True ,stdout=subprocess.PIPE)
         output = sub_return.stdout.read()
+        self._widget.textBrowser.append("\n\n")
         self._widget.textBrowser.append("search result---------")
         self._widget.textBrowser.append(output[:-1])
         self._widget.textBrowser.append("---------search result")
