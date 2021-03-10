@@ -23,7 +23,8 @@ import actionlib
 from actionlib_msgs.msg import GoalStatus
 from assembly_task_manager.params.default_parameters import short_bolt_drill_load, long_bolt_drill_load, side_left_load, side_right_load
 from assembly_task_manager.params.default_parameters import long_load, short_load, middle_load, bottom_load, chair_load, rotate_load_div2
-
+import threading
+import traceback
 # ## when testing -- not using default_parameters
 # short_bolt_drill_load = SetLoadRequest(mass=0.0, F_x_center_load = [0.0, 0.0, 0.0])
 # long_bolt_drill_load = short_bolt_drill_load
@@ -127,6 +128,7 @@ class AssemblyGuiPlugin(Plugin):
 
         # self._widget.btn_run.pressed.connect(self.btn_run_on_click)
         self._widget.btn_comp_.pressed.connect(self.btn_comp_on_click)
+        self._widget.btn_sm_.pressed.connect(self.btn_sm_on_click)
         self._widget.line_find.returnPressed.connect(self.line_find_pressed)
         self._widget.line_kill.returnPressed.connect(self.line_kill_pressed)
 
@@ -144,6 +146,12 @@ class AssemblyGuiPlugin(Plugin):
         self._widget.textBrowser.append("author: KIM-HC, psh117")
         self._widget.textBrowser.append("---------------------------------------")
 
+
+        self._dxl_thread = threading.Thread(target=self.__dxl_process, args=(None))
+
+    def __dxl_process(self, req):
+        self.dxl_gripper_proxy(req)
+        
     def line_find_pressed(self):
         cmd = ['ps -Af | grep '+self._widget.line_find.text()]
         sub_return = subprocess.Popen(cmd, shell=True ,stdout=subprocess.PIPE)
@@ -154,7 +162,16 @@ class AssemblyGuiPlugin(Plugin):
         self._widget.textBrowser.append("---------search result")
 
     def btn_comp_on_click(self):
-        cmd = ['ps -Af | grep comp_']
+        cmd = ['ps -Af | grep step_']
+        sub_return = subprocess.Popen(cmd, shell=True ,stdout=subprocess.PIPE)
+        output = sub_return.stdout.read()
+        self._widget.textBrowser.append("\n\n")
+        self._widget.textBrowser.append("search result---------")
+        self._widget.textBrowser.append(output[:-1])
+        self._widget.textBrowser.append("---------search result")
+
+    def btn_sm_on_click(self):
+        cmd = ['ps -Af | grep sm_']
         sub_return = subprocess.Popen(cmd, shell=True ,stdout=subprocess.PIPE)
         output = sub_return.stdout.read()
         self._widget.textBrowser.append("\n\n")
@@ -214,23 +231,43 @@ class AssemblyGuiPlugin(Plugin):
         pass
 
     def btn_top_gripper_open_on_click(self):
+        if self._dxl_thread.is_alive():
+            self._widget.textBrowser.append("failed to process: not finished yet")
+            return
+        try:
+            self._dxl_thread.join()
+        except:
+            traceback.print_exc()
+            self._widget.textBrowser.append("failed to join")         
+
         req = MoveRequest(hand = ['panda_top'],
                           max_current = [0.0],
                           length = [0.075])
         try:
-            self.dxl_gripper_proxy(req)
+            self._dxl_thread = threading.Thread(target=self.__dxl_process, args=(req,))
+            self._dxl_thread.start()
             self._widget.textBrowser.append("TOP: gripper_open")
         except:
             self._widget.textBrowser.append("SERVER NOT WORKING -- TOP: gripper_open")
 
     def btn_top_gripper_close_on_click(self):
+        if self._dxl_thread.is_alive():
+            self._widget.textBrowser.append("failed to process: not finished yet")
+            return
+        try:
+            self._dxl_thread.join()
+        except:
+            traceback.print_exc()
+            self._widget.textBrowser.append("failed to join")         
+
         current = self._widget.spinbox_top_gripper_force.value()
         length = self._widget.spinbox_top_gripper_width.value()
         req = MoveRequest(hand = ['panda_top'],
                           max_current = [current],
                           length = [length])
         try:
-            self.dxl_gripper_proxy(req)
+            self._dxl_thread = threading.Thread(target=self.__dxl_process, args=(req,))
+            self._dxl_thread.start()
             self._widget.textBrowser.append("TOP: gripper_close | current: "+str(current)+" | length: "+str(length))
         except:
             self._widget.textBrowser.append("SERVER NOT WORKING -- TOP: gripper_close")
@@ -271,23 +308,44 @@ class AssemblyGuiPlugin(Plugin):
         pass
 
     def btn_right_gripper_open_on_click(self):
+        if self._dxl_thread.is_alive():
+            self._widget.textBrowser.append("failed to process: not finished yet")
+            return
+        try:
+            self._dxl_thread.join()
+        except:
+            traceback.print_exc()
+            self._widget.textBrowser.append("failed to join")            
+
         req = MoveRequest(hand = ['panda_right'],
                           max_current = [0.0],
                           length = [0.075])
         try:
-            self.dxl_gripper_proxy(req)
+            self._dxl_thread = threading.Thread(target=self.__dxl_process, args=(req,))
+            self._dxl_thread.start()
             self._widget.textBrowser.append("RIGHT: gripper_open")
         except:
+            traceback.print_exc()
             self._widget.textBrowser.append("SERVER NOT WORKING -- RIGHT: gripper_open")
 
     def btn_right_gripper_close_on_click(self):
+        if self._dxl_thread.is_alive():
+            self._widget.textBrowser.append("failed to process: not finished yet")
+            return
+        try:
+            self._dxl_thread.join()
+        except:
+            traceback.print_exc()
+            self._widget.textBrowser.append("failed to join")         
+
         current = self._widget.spinbox_right_gripper_force.value()
         length = self._widget.spinbox_right_gripper_width.value()
         req = MoveRequest(hand = ['panda_right'],
                           max_current = [current],
                           length = [length])
         try:
-            self.dxl_gripper_proxy(req)
+            self._dxl_thread = threading.Thread(target=self.__dxl_process, args=(req,))
+            self._dxl_thread.start()
             self._widget.textBrowser.append("RIGHT: gripper_close | current: "+str(current)+" | length: "+str(length))
         except:
             self._widget.textBrowser.append("SERVER NOT WORKING -- RIGHT: gripper_close")

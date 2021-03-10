@@ -452,85 +452,6 @@
      </layout>
     </widget>
    </item>
-   <item row="5" column="3">
-    <widget class="QGroupBox" name="groupBox">
-     <property name="title">
-      <string>COMMANDS</string>
-     </property>
-     <widget class="QLineEdit" name="line_kill">
-      <property name="geometry">
-       <rect>
-        <x>50</x>
-        <y>100</y>
-        <width>151</width>
-        <height>25</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="line_find">
-      <property name="geometry">
-       <rect>
-        <x>50</x>
-        <y>60</y>
-        <width>151</width>
-        <height>25</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_13">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>60</y>
-        <width>41</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>FIND</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_14">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>100</y>
-        <width>41</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>KILL</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="btn_comp_">
-      <property name="geometry">
-       <rect>
-        <x>50</x>
-        <y>30</y>
-        <width>151</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>comp_</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_15">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>30</y>
-        <width>41</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>FIND</string>
-      </property>
-     </widget>
-    </widget>
-   </item>
    <item row="3" column="0" colspan="4">
     <widget class="QPushButton" name="btn_unlock_error">
      <property name="text">
@@ -671,6 +592,98 @@
        <widget class="QComboBox" name="combo_left_load_item"/>
       </item>
      </layout>
+    </widget>
+   </item>
+   <item row="5" column="3">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>COMMANDS</string>
+     </property>
+     <widget class="QLineEdit" name="line_kill">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>140</y>
+        <width>151</width>
+        <height>25</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="line_find">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>100</y>
+        <width>151</width>
+        <height>25</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_13">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>100</y>
+        <width>41</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>FIND</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_14">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>140</y>
+        <width>41</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>KILL</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_comp_">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>30</y>
+        <width>151</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>step_</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_15">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>41</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>FIND</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_sm_">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>60</y>
+        <width>151</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>sm_</string>
+      </property>
+     </widget>
     </widget>
    </item>
   </layout>
