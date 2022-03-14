@@ -401,7 +401,7 @@ class AssemblyGuiPlugin(Plugin):
     def btn_left_gripper_close_on_click(self):
         force = self._widget.spinbox_left_gripper_force.value()
         length = self._widget.spinbox_left_gripper_width.value()
-        epsilon = GraspEpsilon(inner=0.027, outer=0.027)
+        epsilon = GraspEpsilon(inner=0.05, outer=0.05)
         req = GraspGoal(width=length,
                           epsilon=epsilon,
                           speed=0.1,
